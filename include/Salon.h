@@ -11,8 +11,8 @@ class Serviciu {
 public:
     explicit Serviciu(std::string nume_serv = "Tuns", double pret_serv = 0.0);
     [[nodiscard]] double getPret() const;
-    [[nodiscard]] std::string getNume() const {return nume; }
-    friend std::ostream& operator<(std::ostream& os, const Serviciu& s);
+    [[nodiscard]] const std::string& getNume() const {return nume; }
+    friend std::ostream& operator<<(std::ostream& os, const Serviciu& s);
 
 };
 
@@ -30,7 +30,7 @@ class Programare {
     std::vector<Serviciu> servicii;
     int* idProgramare;
 public:
-    Programare(std::string client, Angajat a, int id);
+    Programare( const std::string& client,const Angajat& a, int id);
     ~Programare();
     Programare(const Programare& other);
     Programare& operator=(const Programare& other);

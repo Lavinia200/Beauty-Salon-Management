@@ -23,7 +23,7 @@ std::ostream& operator<<(std::ostream& os, const Angajat& a) {
 }
 
 //Implementare Programare
-Programare::Programare(std::string client, Angajat a, int id )
+Programare::Programare( const std::string& client,const Angajat& a, int id )
     : numeClient(std::move(client)), stilist(std::move(a)) {
     idProgramare= new int(id);
 }
