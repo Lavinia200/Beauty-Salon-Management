@@ -40,4 +40,17 @@ public:
     [[nodiscard]] bool estePremium() const;
     friend std::ostream& operator<<(std::ostream& os, const Programare& p);
 };
+
+class Salon {
+    std::string numeSalon;
+    std:: vector<Programare> listaProgramari;
+public:
+    explicit Salon(std:: string nume = "Beauty Salon");
+
+    void adaugaProgramare(const Programare& p);
+    void afiseazaRaportZilnic() const;
+    [[nodiscard]] double calculeazaIncasariTotale() const;
+    friend std::ostream& operator<<(std::ostream& os, const Salon& s);
+
+};
 #endif // EXAMPLE_H

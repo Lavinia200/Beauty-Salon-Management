@@ -1,1 +1,10 @@
-ext/** linguist-vendored
+ext/* linguist-vendored
+cmake/* linguist-vendored
+build/* linguist-vendored
+.github/* linguist-vendored
+
+CMakeLists.txt linguist-documentation
+*.cmake linguist-documentation
+*.txt linguist-generated
+
+

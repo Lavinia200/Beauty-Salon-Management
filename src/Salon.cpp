@@ -57,3 +57,28 @@ std::ostream& operator<<(std::ostream& os, const Programare& p) {
     <<p.stilist <<"\n Total:"<< p.calculeazaTotal()<< "Ron";
     return os;
 }
+
+//Implementare Salon
+
+Salon::Salon( std::string nume) : numeSalon(std::move(nume)) {}
+void Salon::adaugaProgramare(const Programare& p) {
+    listaProgramari.push_back(p);
+}
+double Salon::calculeazaIncasariTotale() const {
+    double total = 0 ;
+    for (const auto& p : listaProgramari) {
+        total += p.calculeazaTotal();
+    }
+    return total;
+}
+void Salon:: afiseazaRaportZilnic() const {
+    std::cout<< "Raport -- "<< numeSalon << "\n";
+    for (const auto& p : listaProgramari) {
+        std::cout<<p<<std::endl;
+    }
+    std::cout<< "Total incasari "<< calculeazaIncasariTotale() <<"RON\n";
+}
+std::ostream& operator<<(std::ostream& os, const Salon& s) {
+    os<< "Salon: "<<s.numeSalon <<"- Programari active : "<< s.listaProgramari.size()<< "-";
+    return os;
+}

@@ -1,3 +1,6 @@
-Elena Cosmetician
-Mariana 1
-Manichiura 250.0
+Elena
+Cosmetician
+Mariana
+101
+Manichiura-Complexa
+600.0

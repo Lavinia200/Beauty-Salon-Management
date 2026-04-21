@@ -30,6 +30,13 @@ int main() {
         std::cout<<"Client premium" << std::endl;
     }
 
+    Salon salonulMeu("Lav Beauty Center");
+    salonulMeu.adaugaProgramare(p);
+
+    Programare p2 = p;
+    salonulMeu.adaugaProgramare(p2);
+    std:: cout<<salonulMeu <<"\n";
+    salonulMeu.afiseazaRaportZilnic();
 
 
 
