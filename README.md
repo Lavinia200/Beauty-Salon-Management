@@ -11,9 +11,6 @@ Proiectul este organizat în 4 clase principale:
 
 
 
-
-# Nu primesc notă pentru că nu am pus titlu și descriere
-
 ### Folosiți template-ul corespunzător grupei voastre!
 
 | Laborant  | Link template                                |
