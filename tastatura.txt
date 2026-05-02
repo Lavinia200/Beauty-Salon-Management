@@ -1,14 +1,22 @@
+Andrei
+Senior-Stilist
+Maria_Ionescu
+Doreste_vopsit_special_si_cafea
+Vopsit Balayage
+450
+da
+Tratament Olaplex
+120
+da
+Tuns Varfuri
+50
+nu
+da
 Elena
 Cosmetician
-Mariana
-Alergie la vopsea de par
-Tratament-Facial-Premium
-650.0
-da
-Andrei
-Frizer
-Ionut
-Fara observatii speciale
-Tuns-Barbat
-60.0
+Ion_Popescu
+Client_nou
+Pensat
+40
+nu
 nu

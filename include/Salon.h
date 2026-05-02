@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <iomanip>
 
 class Serviciu {
     std::string nume;
@@ -41,6 +42,8 @@ public:
     void adaugaServiciu(const Serviciu& s);
     [[nodiscard]] double calculeazaTotal() const;
     [[nodiscard]] bool estePremium() const;
+
+    double aplicaDiscount() const;
 
     friend std::ostream& operator<<(std::ostream& os, const Programare& p);
 };

@@ -1,12 +1,6 @@
-* text = auto
+* text=auto
 *.cpp text
 *.h text
 *.txt text
-
-CMakeLists.txt text
-* .cmake text
-
-*.sh text eol = lf
-*.exe binary
 
 

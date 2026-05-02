@@ -6,7 +6,14 @@
 
 //Implementare Serviciu
 Serviciu::Serviciu(std::string nume_serv, double pret_serv)
-    : nume(std::move(nume_serv)), pret(pret_serv){}
+    : nume(std::move(nume_serv)), pret(pret_serv) {
+    if (pret_serv < 0 ) {
+        std::cerr <<"Pret negativ introdus pentru " << nume << " Setat la 0\n.";
+        pret = 0;
+    } else {
+        pret = pret_serv;
+    }
+}
 double Serviciu::getPret() const{return pret;}
 std::ostream& operator<<(std::ostream& os, const Serviciu& s) {
     os<< s.getNume() <<"("<<s.getPret()<<"Ron)";
@@ -15,7 +22,10 @@ std::ostream& operator<<(std::ostream& os, const Serviciu& s) {
 
 //Implementare Angajat
 Angajat::Angajat(std::string nume_ang, std::string spec)
-    :nume(std::move(nume_ang)), specializare(std::move(spec)) {}
+    :nume(std::move(nume_ang)), specializare(std::move(spec)) {
+    if (nume.empty()) nume = "Anonim";
+    if (specializare.empty()) specializare = "General";
+}
 std::ostream& operator<<(std::ostream& os, const Angajat& a) {
     os<< "Stilist:" <<a.nume <<"["<<a.specializare<< "]";
     return os;
@@ -67,7 +77,7 @@ double Programare::calculeazaTotal() const {
 }
 bool Programare::estePremium() const{return calculeazaTotal() > 500.0; }
 std::ostream& operator<<(std::ostream& os, const Programare& p) {
-    os <<"Programare client" << p.numeClient <<"\n "
+    os <<"Programare client " << p.numeClient <<"\n "
     <<p.stilist <<"\n Servicii:";
 
     if (p.servicii.empty()) {
@@ -85,6 +95,17 @@ std::ostream& operator<<(std::ostream& os, const Programare& p) {
     return os;
 }
 
+double Programare::aplicaDiscount() const {
+    double total = calculeazaTotal();
+    double discount = 0;
+
+    if (servicii.size() >= 3) {
+        discount = total * 0.10;
+    } else if (total > 1000.0) {
+        discount = total * 0.05;
+    }
+    return discount;
+}
 //Implementare Salon
 
 Salon::Salon( std::string nume) : numeSalon(std::move(nume)) {}
@@ -94,18 +115,33 @@ void Salon::adaugaProgramare(const Programare& p) {
 double Salon::calculeazaIncasariTotale() const {
     double total = 0 ;
     for (const auto& p : listaProgramari) {
-        total += p.calculeazaTotal();
+        total += (p.calculeazaTotal() - p.aplicaDiscount());
     }
     return total;
 }
 void Salon:: afiseazaRaportZilnic() const {
-    std::cout<< "-- Raport zilnic -- "<< numeSalon << "\n";
-    for (const auto& p : listaProgramari) {
-        std::cout<<p<<std::endl;
+    std::cout << std::setw(25) << "-- Raport zilnic -- "<< numeSalon << "\n";
+
+    if (listaProgramari.empty()) {
+        std::cout<<"Nu exista programari inregistrate astazi.\n";
+    }else {
+        int contor = 1;
+        for (const auto& p : listaProgramari) {
+            std::cout<<"\n(" << contor++ << ")" << p <<"\n";
+            double desc = p.aplicaDiscount();
+            if (desc >0) {
+                double pretFinal = p.calculeazaTotal() - desc;
+                std::cout<< "Discount aplicat: -" << desc << "RON\n";
+                std::cout << "    >>> PRET FINAL DE PLATA: " << std::fixed << std::setprecision(2) << pretFinal << " RON\n";
+            }
+        }
+        std::cout<< "\nREZUMAT FINANCIAR:\n";
+        std::cout<< "- Incasari: " << std::fixed <<std::setprecision(2)<< calculeazaIncasariTotale() << "RON\n";
+        std::cout<<"- Numar total clienti: " <<listaProgramari.size() << "\n";
     }
-    std::cout<< "Total incasari "<< calculeazaIncasariTotale() <<"RON\n";
 }
 std::ostream& operator<<(std::ostream& os, const Salon& s) {
     os<< "Salon: "<<s.numeSalon <<"- Programari active : "<< s.listaProgramari.size()<< "-";
     return os;
 }
+
