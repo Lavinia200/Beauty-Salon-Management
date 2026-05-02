@@ -1,6 +1,14 @@
 Elena
 Cosmetician
 Mariana
-101
-Manichiura-Complexa
-600.0
+Alergie la vopsea de par
+Tratament-Facial-Premium
+650.0
+da
+Andrei
+Frizer
+Ionut
+Fara observatii speciale
+Tuns-Barbat
+60.0
+nu

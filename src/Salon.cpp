@@ -1,8 +1,7 @@
 #include "Salon.h"
 #include <utility>
 
-// This also works if you do not want `../`, but some editors might not like it
-// #include "Example.h"
+
 
 
 //Implementare Serviciu
@@ -18,29 +17,44 @@ std::ostream& operator<<(std::ostream& os, const Serviciu& s) {
 Angajat::Angajat(std::string nume_ang, std::string spec)
     :nume(std::move(nume_ang)), specializare(std::move(spec)) {}
 std::ostream& operator<<(std::ostream& os, const Angajat& a) {
-    os<< "Stlist:" <<a.nume <<"["<<a.specializare<< "]";
+    os<< "Stilist:" <<a.nume <<"["<<a.specializare<< "]";
     return os;
 }
 
 //Implementare Programare
-Programare::Programare( const std::string& client,const Angajat& a, int id )
-    : numeClient(std::move(client)), stilist(std::move(a)) {
-    idProgramare= new int(id);
+Programare::Programare( const std::string& client,const Angajat& a, const std::string& obs )
+    : numeClient(client), stilist(a) {
+    if (!obs.empty()) {
+        observatii = new std:: string(obs);
+    }else {
+        observatii = nullptr;
+    }
 }
 
-Programare::~Programare(){delete idProgramare; }
+Programare::~Programare() {
+    delete observatii;
+}
+
 Programare::Programare(const Programare& other)
     :numeClient(other.numeClient), stilist(other.stilist), servicii(other.servicii) {
-    idProgramare = new int(*other.idProgramare);
+    if (other.observatii != nullptr) {
+        observatii = new std::string(*other.observatii);
+    }else {
+        observatii = nullptr;
+    }
 }
 Programare& Programare::operator = (const Programare& other) {
     if (this != &other) {
         numeClient = other.numeClient;
         stilist = other.stilist;
         servicii = other.servicii;
-        int* new_id = new int(*other.idProgramare);
-        delete idProgramare;
-        idProgramare = new_id;
+
+        delete observatii;
+        if (other.observatii != nullptr) {
+            observatii = new std::string(*other.observatii);
+        }else {
+            observatii = nullptr;
+        }
     }
     return *this ;
 }
@@ -53,8 +67,21 @@ double Programare::calculeazaTotal() const {
 }
 bool Programare::estePremium() const{return calculeazaTotal() > 500.0; }
 std::ostream& operator<<(std::ostream& os, const Programare& p) {
-    os <<"Programarea #" << *p.idProgramare <<" pentru " <<p.numeClient<<"\n"<<" "
-    <<p.stilist <<"\n Total:"<< p.calculeazaTotal()<< "Ron";
+    os <<"Programare client" << p.numeClient <<"\n "
+    <<p.stilist <<"\n Servicii:";
+
+    if (p.servicii.empty()) {
+        os<<"Niciun serviciu selectat.";
+    }else {
+        for (const auto& s : p.servicii) {
+            os << "\n - " <<s;
+        }
+    }
+
+    if (p.observatii != nullptr) {
+        os << "\n Observatii:" << *p.observatii;
+    }
+    os << "\n Total de plata: " << p.calculeazaTotal() << "RON";
     return os;
 }
 
@@ -72,7 +99,7 @@ double Salon::calculeazaIncasariTotale() const {
     return total;
 }
 void Salon:: afiseazaRaportZilnic() const {
-    std::cout<< "Raport -- "<< numeSalon << "\n";
+    std::cout<< "-- Raport zilnic -- "<< numeSalon << "\n";
     for (const auto& p : listaProgramari) {
         std::cout<<p<<std::endl;
     }

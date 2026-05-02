@@ -12,6 +12,7 @@ public:
     explicit Serviciu(std::string nume_serv = "Tuns", double pret_serv = 0.0);
     [[nodiscard]] double getPret() const;
     [[nodiscard]] const std::string& getNume() const {return nume; }
+
     friend std::ostream& operator<<(std::ostream& os, const Serviciu& s);
 
 };
@@ -21,6 +22,7 @@ class Angajat {
     std::string specializare;
 public:
     explicit Angajat(std::string nume_ang = "Anonim", std::string spec = "General");
+
     friend std::ostream& operator<<(std::ostream& os, const Angajat& a);
 };
 
@@ -28,9 +30,10 @@ class Programare {
     std::string numeClient;
     Angajat stilist;
     std::vector<Serviciu> servicii;
-    int* idProgramare;
+    std::string* observatii;
 public:
-    Programare( const std::string& client,const Angajat& a, int id);
+    Programare( const std::string& client,const Angajat& a, const std::string& obs = "");
+
     ~Programare();
     Programare(const Programare& other);
     Programare& operator=(const Programare& other);
@@ -38,6 +41,7 @@ public:
     void adaugaServiciu(const Serviciu& s);
     [[nodiscard]] double calculeazaTotal() const;
     [[nodiscard]] bool estePremium() const;
+
     friend std::ostream& operator<<(std::ostream& os, const Programare& p);
 };
 
@@ -53,4 +57,4 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const Salon& s);
 
 };
-#endif // EXAMPLE_H
+#endif

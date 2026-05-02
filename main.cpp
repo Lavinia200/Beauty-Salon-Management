@@ -1,77 +1,46 @@
 #include <iostream>
 #include <string>
 #include "Salon.h"
+#include <limits>
 
- // This also works if you do not want `include/`, but some editors might not like it
-// #include "Example.h"
 
 int main() {
-    std:: string numeAngajat, specializare, numeClient, numeServiciu;
+    std:: string numeAngajat, specializare, numeClient, numeServiciu, raspuns;
     double pretServiciu;
-    int id;
 
-    std::cout<< "Tasteaza nume angajat si specializare: ";
-    std::cin>> numeAngajat >>specializare;
+    Salon salonulMeu("Beauty Lab");
+    do {
+        std::cout<<"Introducere programare: ";
 
-    std::cout<<"Tasteaza nume client si id programare: ";
-    std::cin>> numeClient >> id;
+        std::cout<< "Tasteaza nume angajat si specializare: ";
+        std::cin>> numeAngajat >>specializare;
 
-    std::cout<<"Tasteaza nume serviciu si pret: ";
-    std::cin>>numeServiciu >> pretServiciu;
+        std::cout<<"Tasteaza nume client";
+        std::cin>> numeClient;
 
-    Angajat a(numeAngajat, specializare);
-    Programare p(numeClient, a, id);
-    p.adaugaServiciu(Serviciu(numeServiciu, pretServiciu));
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout<<"Tasteaza observatii speciale ( sau apasa Enter daca nu sunt): ";
+        std::string obsClient;
+        std::getline(std::cin, obsClient);
 
-    std::cout<<"DETALII PROGRAMARE\n";
-    std::cout<<p <<std:: endl;
+        std::cout<<"Tasteaza nume serviciu si pret: ";
+        std::cin>>numeServiciu >> pretServiciu;
 
-    if (p.estePremium()) {
-        std::cout<<"Client premium" << std::endl;
-    }
+        Angajat ang(numeAngajat, specializare);
+        Programare p(numeClient, ang, obsClient);
+        p.adaugaServiciu(Serviciu(numeServiciu, pretServiciu));
 
-    Salon salonulMeu("Lav Beauty Center");
-    salonulMeu.adaugaProgramare(p);
+        if (p.estePremium()) {
+            std::cout<<"Acesta este un client PREMIUM";
+        }
+        salonulMeu.adaugaProgramare(p);
 
-    Programare p2 = p;
-    salonulMeu.adaugaProgramare(p2);
+        std::cout<<"\nMai doriti sa adaugati o programare? (da/nu):";
+        std::cin>>raspuns;
+    } while (raspuns == "da" || raspuns == "DA" );
+
+
     std:: cout<<salonulMeu <<"\n";
     salonulMeu.afiseazaRaportZilnic();
-
-
-
-    /////////////////////////////////////////////////////////////////////////
-    /// Observație: dacă aveți nevoie să citiți date de intrare de la tastatură,
-    /// dați exemple de date de intrare folosind fișierul tastatura.txt
-    /// Trebuie să aveți în fișierul tastatura.txt suficiente date de intrare
-    /// (în formatul impus de voi) astfel încât execuția programului să se încheie.
-    /// De asemenea, trebuie să adăugați în acest fișier date de intrare
-    /// pentru cât mai multe ramuri de execuție.
-    /// Dorim să facem acest lucru pentru a automatiza testarea codului, fără să
-    /// mai pierdem timp de fiecare dată să introducem de la zero aceleași date de intrare.
-    ///
-    /// Pe GitHub Actions (bife), fișierul tastatura.txt este folosit
-    /// pentru a simula date introduse de la tastatură.
-    /// Bifele verifică dacă programul are erori de compilare, erori de memorie și memory leaks.
-    ///
-    /// Dacă nu puneți în tastatura.txt suficiente date de intrare, îmi rezerv dreptul să vă
-    /// testez codul cu ce date de intrare am chef și să nu pun notă dacă găsesc vreun bug.
-    /// Impun această cerință ca să învățați să faceți un demo și să arătați părțile din
-    /// program care merg (și să le evitați pe cele care nu merg).
-    ///
-    /////////////////////////////////////////////////////////////////////////
-
-    /////////////////////////////////////////////////////////////////////////
-
-
-    ///////////////////////////////////////////////////////////////////////////
-    /// Pentru date citite din fișier, NU folosiți tastatura.txt. Creați-vă voi
-    /// alt fișier propriu cu ce alt nume doriți.
-    /// Exemplu:
-    /// std::ifstream fis("date.txt");
-    /// for(int i = 0; i < nr2; ++i)
-    ///     fis >> v2[i];
-    ///
-    ///////////////////////////////////////////////////////////////////////////
     return 0;
 }
