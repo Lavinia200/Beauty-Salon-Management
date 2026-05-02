@@ -2,11 +2,14 @@
 Proiectul meu consta intr-o aplicatie de tip back-end pentru gestionarea activitatii zilnice dintr-un salon de infrumsetare.
 Functionalitati propuse: inregistrarea si stocarea datelor de contact ale angajatilor si clientilor, un catalog de servicii cu preturi si durate specifice si un sistem de programari.
 
+Proiectul este organizat în 4 clase principale:
+1. **Serviciu**: Gestionează detaliile despre serviciile oferite (nume, preț).
+2. **Angajat**: Reține informații despre stilist și specializarea acestuia.
+3. **Programare**: Clasa centrală care utilizează **compunerea** pentru a lega un client de un angajat și o listă de servicii. Gestionează memoria dinamic pentru observații speciale.
+4. **Salon**: Gestionează o colecție de programări și generează rapoarte financiare.
 
 
 
-
-# Nu primesc notă pentru că nu am pus titlu și descriere
 
 ### Folosiți template-ul corespunzător grupei voastre!
 
