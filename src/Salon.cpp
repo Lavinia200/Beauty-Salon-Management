@@ -99,9 +99,11 @@ double Programare::aplicaDiscount() const {
     double total = calculeazaTotal();
     double discount = 0;
 
-    if (servicii.size() >= 3) {
+    if (servicii.size() >= 5) {
+        discount = total * 0.20;
+    } else if (servicii.size() >= 3) {
         discount = total * 0.10;
-    } else if (total > 1000.0) {
+    }else if (total > 1000.0) {
         discount = total * 0.05;
     }
     return discount;
