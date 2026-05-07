@@ -51,9 +51,9 @@ public:
     }
 
     //getter pt nume
-    [[nodiscard]] std::string getNume() const {return nume;}
+    [[nodiscard]] std::string& getNume() const {return nume;}
     //getter pt specializare
-    [[nodiscard]] std::string getSpecializare() const { return specializare;}
+    [[nodiscard]] const std::string& getSpecializare() const { return specializare;}
 
     friend std::ostream& operator<<(std::ostream& os, const Angajat& a);
 };

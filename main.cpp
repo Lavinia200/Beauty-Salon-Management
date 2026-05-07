@@ -115,7 +115,8 @@ int main() {
 
                 std::cout<< "\nDoriti sa rezervati un interval? (da/nu): \n";
                 std:: string confirm;
-                std::getline(std::cin, confirm);
+                std::cin >> confirm;
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
                 if (confirm == "da" || confirm == "DA") {
                     int h,m;
@@ -136,11 +137,32 @@ int main() {
                         std::cout<< "Observatii: \n";
                         std::string obs;
                         std:: getline(std::cin, obs);
+                        p.setObservatii(obs);
 
                         salonulMeu.adaugaProgramare(p);
                         std::cout<<"Rezervare confirmata! ";
                     } else {
                         std::cout<<"Intervalul nu mai este disponibil. ";
+                    }
+                }else {
+                    std::cout <<"Doriti sa va programati la un alt specialist pentru aceste servicii?";
+                    std::string vreauAltul;
+                    std::getline(std::cin, vreauAltul);
+
+                    if (vreauAltul == "da" || vreauAltul =="DA") {
+                        std::cout<< "--- ALEGETI UN NOU SPECIALIST ---\n";
+                        for (size_t i = 0; i < listaAngajati.size(); ++i) {
+                            std::cout<< i + 1 << ". " << listaAngajati[i].getNume() << "\n";
+                        }
+                        int optiuneNoua;
+                        std::cin >> optiuneNoua;
+                        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+                        angAles = listaAngajati[optiuneNoua - 1];
+                        p.setStilist(angAles);
+
+                        std::cout << "Disponibilitate " << angAles.getNume() << ".\n";
+                        salonulMeu.afiseazaDisponibilitateAngajat(angAles.getNume(), zi, luna, an, durataTotala);
                     }
                 }
             }

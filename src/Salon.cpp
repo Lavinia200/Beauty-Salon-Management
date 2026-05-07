@@ -1,5 +1,6 @@
 #include "Salon.h"
 #include <utility>
+#include <iomanip>
 
 
 
@@ -49,15 +50,13 @@ std::ostream& operator<<(std::ostream& os, const Angajat& a) {
 Programare::Programare( const std::string& client,const Angajat& a, int z, int l, int an_pr, IntervalOrar inter, const std::string& obs )
     : numeClient(client),
       stilist(a),
+      observatii(obs.empty() ? nullptr : new std::string(obs)),
+      interval(inter),
       zi(z),
       luna(l),
-      an(an_pr),
-      interval(inter) {
-    if (!obs.empty()) {
-        observatii = new std:: string(obs);
-    }else {
-        observatii = nullptr;
-    }
+      an(an_pr)
+{
+
 }
 
 Programare::~Programare() {
@@ -119,8 +118,12 @@ int Programare::calculeazaDurataTotala() const {
 }
 bool Programare::estePremium() const{return calculeazaTotal() > 500.0; }
 std::ostream& operator<<(std::ostream& os, const Programare& p) {
-    os <<"Programare client " << p.numeClient <<"\n "
-    <<p.stilist <<"\n Servicii:";
+    os <<"Programare client " << p.numeClient ;
+
+    if (p.estePremium()) {
+        os << " [CLIENT PREMIUM]";
+    }
+    os << "\n " << p.stilist << "\n Servicii: ";
 
     if (p.servicii.empty()) {
         os<<"Niciun serviciu selectat.";
@@ -133,8 +136,11 @@ std::ostream& operator<<(std::ostream& os, const Programare& p) {
     if (p.observatii != nullptr) {
         os << "\n Observatii:" << *p.observatii;
     }
-    os << "\n Total de plata: " << p.calculeazaTotal() << "RON";
-    os <<"\n Timp total estimaty: " << p.calculeazaDurataTotala() << "minute";
+    os << "\n Total de plata: " << p.calculeazaTotal() << " RON";
+    os <<"\n Timp total estimat: " << p.calculeazaDurataTotala() << "minute";
+    if (p.calculeazaDurataTotala() > 120) {
+        os << "\n [ Vizita de lunga durata]";
+    }
     return os;
 }
 
