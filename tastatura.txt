@@ -1,22 +1,18 @@
-Andrei
-Senior-Stilist
-Maria_Ionescu
-Doreste_vopsit_special_si_cafea
-Vopsit Balayage
-450
-da
-Tratament Olaplex
-120
-da
-Tuns Varfuri
-50
+Lavinia Popescu
+2
+2
 nu
+15 05 2026
 da
-Elena
-Cosmetician
-Ion_Popescu
-Client_nou
-Pensat
-40
+10 00
+Are parul lung.
+da
+1
+1
+nu
+15 05 2026
+da
+12 30
+Fara oja stridenta.
 nu
 nu

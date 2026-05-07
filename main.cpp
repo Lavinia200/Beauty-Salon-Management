@@ -113,13 +113,13 @@ int main() {
                 //cautare disponibilitate
                 salonulMeu.afiseazaDisponibilitateAngajat( angAles.getNume(), zi, luna, an, durataTotala);
 
-                std::cout<< "\nDoriti sa rezervati un interval? (da/nu): ";
+                std::cout<< "\nDoriti sa rezervati un interval? (da/nu): \n";
                 std:: string confirm;
                 std::getline(std::cin, confirm);
 
                 if (confirm == "da" || confirm == "DA") {
                     int h,m;
-                    std::cout<< "Ora start programare: ";
+                    std::cout<< "Ora start programare: \n";
                     std::cin >>h>>m;
                     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
@@ -133,7 +133,7 @@ int main() {
                         p.setData(zi, luna, an);
                         p.setInterval(inter);
 
-                        std::cout<< "Observatii: ";
+                        std::cout<< "Observatii: \n";
                         std::string obs;
                         std:: getline(std::cin, obs);
 
