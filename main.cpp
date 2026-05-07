@@ -74,8 +74,11 @@ int main() {
                 for (size_t i = 0; i < catalog.size(); ++i) {
                     if (angAles.poatePresta(catalog[i].getTip())) {
                         std::cout << contor << ". " <<std::left <<std::setw(20) << catalog[i].getNume()
-                        << " | " << catalog[i].getDurata() << " min | " <<catalog[i].getPret() <<" RON\n";
-
+                        << " | " << catalog[i].getDurata() << " min | " <<catalog[i].getPret() <<" RON";
+                        if (catalog[i].esteComplex()) {
+                            std::cout << " [Serviciu complex]";
+                        }
+                        std::cout<< "\n";
                         indiciFiltrati.push_back(i);
                         contor++;
                     }
@@ -140,7 +143,7 @@ int main() {
                         p.setObservatii(obs);
 
                         salonulMeu.adaugaProgramare(p);
-                        std::cout<<"Rezervare confirmata! ";
+                        std::cout<<"Rezervare confirmata pentru " << p.getNumeClient() << std::endl;
                     } else {
                         std::cout<<"Intervalul nu mai este disponibil. ";
                     }
