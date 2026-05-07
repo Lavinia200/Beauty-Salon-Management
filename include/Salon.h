@@ -51,7 +51,7 @@ public:
     }
 
     //getter pt nume
-    [[nodiscard]] std::string& getNume() const {return nume;}
+    [[nodiscard]]  const std::string& getNume() const {return nume;}
     //getter pt specializare
     [[nodiscard]] const std::string& getSpecializare() const { return specializare;}
 
