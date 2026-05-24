@@ -6,180 +6,330 @@
 #include "Salon.h"
 
 
+void curataBuffer() {
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+}
+
 int main() {
 
     Salon salonulMeu("Beauty Lab");
+
+    salonulMeu.adaugaServiciuInCatalog(Serviciu("Tuns Barbati", 50.0, 30, "Tuns"));
+    salonulMeu.adaugaServiciuInCatalog(Serviciu("Tuns Femei", 90.0, 60, "Tuns"));
+    salonulMeu.adaugaServiciuInCatalog(Serviciu("Vopsit Total", 200.0, 120, "Vopsit"));
+    salonulMeu.adaugaServiciuInCatalog(Serviciu("Tratament Facial", 150.0, 45, "Cosmetica"));
+    salonulMeu.adaugaServiciuInCatalog(Serviciu("Manichiura clasica", 80.0, 60, "Manichiura"));
+    salonulMeu.adaugaServiciuInCatalog(Serviciu("Tratament hidratare", 250.0, 150, "Tratament"));
+
     //adaugam personal
-    Angajat a1("Andreea", "Cosmetician");
-    a1.adaugaCompetenta(TipServiciu::COSMETICA);
-    a1.adaugaCompetenta(TipServiciu::TRATAMENT);
+    Angajat* a1 = new StilistJunior("Andreea", "Cosmetician", 35.0);
+    a1->adaugaCompetenta("Cosmetica");
+    a1->adaugaCompetenta("Tratament");
 
-    Angajat a2("Matei", "Hair-Stilist");
-    a2.adaugaCompetenta(TipServiciu::TUNS);
-    a2.adaugaCompetenta(TipServiciu::VOPSIT);
+    Angajat* a2 = new StilistSenior("Matei", "Hair-Stilist", 0.12, 2);
+    a2->adaugaCompetenta("Tuns");
+    a2->adaugaCompetenta("Vopsit");
 
-    Angajat a3("Elena", "Manichiurista");
-    a3.adaugaCompetenta(TipServiciu::MANICHIURA); // Pentru manichiură spa/tratament
+    Angajat* a3 = new StilistJunior("Elena", "Manichiurista", 40.0);
+    a3->adaugaCompetenta("Manichiura");
+
+    Angajat* m1 = new ManagerSalon("Gabriela", 5000.0);
 
     salonulMeu.adaugaAngajat(a1);
     salonulMeu.adaugaAngajat(a2);
     salonulMeu.adaugaAngajat(a3);
-    //catalog de servicii
-    std:: vector<Serviciu> catalog = {
-        Serviciu("Tuns Barbati", 50.0, 30, TipServiciu::TUNS),
-        Serviciu("Tuns Femei", 90.0, 60, TipServiciu::TUNS),
-        Serviciu("Vopsit Total", 200.0, 120, TipServiciu::VOPSIT),
-        Serviciu("Tratament Facial", 150.0, 45, TipServiciu::COSMETICA),
-        Serviciu("Manichiura clasica", 80.0, 60, TipServiciu::MANICHIURA),
-        Serviciu("Tratament hidratare", 250.0, 150, TipServiciu::TRATAMENT)
-    };
+    salonulMeu.adaugaAngajat(m1);
 
-    std:: string raspunsClientNou;
+    int optiunePrincipala = 0;
     do {
-        std::string numeClient;
         std::cout << "\n==============================================";
-        std::cout << "\nSISTEM GESTIUNE PROGRAMARI - CLIENT NOU";
+        std::cout << "\nSISTEM GESTIUNE SALON - " << "BEAUTY LAB";
         std::cout << "\n==============================================";
-        std::cout << "\nIntroduceti numele clientului: ";
+        std::cout << "\n[1] CLIENT";
+        std::cout << "\n[2] MANAGER";
+        std::cout << "\n[3] IESIRE APLICATIE";
+        std::cout << "\n==============================================";
+        std::cout << "\nAlegeti tipul de cont: ";
 
-        if (std:: cin.peek() == '\n') std::cin.ignore();
-        std:: getline(std::cin, numeClient);
+        if (!(std::cin >> optiunePrincipala)) {
+            curataBuffer();
+            continue;
+        }
+        //MOD CLIENT
+        if (optiunePrincipala == 1) {
+            std::string numeClient;
+            std::cout << "\n--- INTERFATA CLIENT ---";
+            std::cout << "\nIntroduceti numele dvs: ";
+            if (std:: cin.peek() == '\n') std::cin.ignore();
+            std:: getline(std::cin, numeClient);
 
-        std:: string raspunsAltaProgramare;
-        do {
-            std::cout << "\n--- SPECIALISTI DISPONIBILI ---\n";
-            const auto& listaAngajati = salonulMeu.getAngajati();
-            for (size_t i = 0; i < listaAngajati.size(); ++i) {
-                std:: cout << i + 1 << ". " << listaAngajati[i].getNume() << " [" << listaAngajati[i].getSpecializare() << "]\n";
-            }
-
-            int optiuneAng;
-            std::cout<< "Alegeti specialistul: ";
-            while (!(std::cin >> optiuneAng) || optiuneAng < 1 || optiuneAng > (int)listaAngajati.size()) {
-                std::cout<< "Selectie invalida.Reincercati: ";
-                std::cin.clear();
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            }
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');//curatare buffer
-
-            Angajat angAles = listaAngajati[optiuneAng - 1];
-            IntervalOrar interval = {0,0,0,0};
-            Programare p(numeClient, angAles, 0,0,0,interval);
-
-            std::string altServiciu;
+            std::string raspunsAltaProgramare;
             do {
-                std::cout <<"\n--- SERVICII PRESTATE DE " << angAles.getNume() << " ---\n";
-                std::vector <int> indiciFiltrati;
-                int contor = 1;
-                for (size_t i = 0; i < catalog.size(); ++i) {
-                    if (angAles.poatePresta(catalog[i].getTip())) {
-                        std::cout << contor << ". " <<std::left <<std::setw(20) << catalog[i].getNume()
-                        << " | " << catalog[i].getDurata() << " min | " <<catalog[i].getPret() <<" RON";
-                        if (catalog[i].esteComplex()) {
-                            std::cout << " [Serviciu complex]";
+                try {
+                    std::cout << "\n--- SPECIALISTI DISPONIBILI ---\n";
+                    const auto& listaAngajati = salonulMeu.getAngajati();
+                    int contor = 1;
+                    for (const auto* ang : listaAngajati ) {
+                        std:: cout << contor++ << ". " << ang-> getNume()
+                        << " [" <<  ang->getSpecializare() << " - " << ang->getGrad() << "]\n";
+
+                    }
+
+                    int optiuneAng;
+                    std::cout<< "Alegeti specialistul dorit: ";
+                    while (!(std::cin >> optiuneAng) || optiuneAng < 1 || optiuneAng > (int)listaAngajati.size()) {
+                        std::cout<< "Selectie invalida.Reincercati: ";
+                        curataBuffer();
+                    }
+                    curataBuffer();
+
+                    Angajat* angAles = listaAngajati[optiuneAng - 1];
+                    IntervalOrar intervalGol = {0,0,0,0};
+                    Programare p(numeClient, *angAles, 0,0,0,intervalGol);
+
+                    std::string altServiciu;
+                    do {
+                        std::cout <<"\n--- SERVICII PRESTATE DE " << angAles->getNume() << " ---\n";
+                        std::vector <int> indiciFiltrati;
+                        int contorS = 1;
+                        const auto& catalogSalon = salonulMeu.getCatalog();
+                        for (size_t i = 0; i < catalogSalon.size(); ++i) {
+                            if (angAles->poatePresta(catalogSalon[i].getTip())) {
+                                std::cout << contorS << ". " <<std::left <<std::setw(20) << catalogSalon[i].getNume()
+                                << " | " << catalogSalon[i].getDurata() << " min | " <<catalogSalon[i].getPret() <<" RON";
+                                if (catalogSalon[i].esteComplex()) {
+                                    std::cout << " [Serviciu complex]";
+                                }
+                                std::cout<< "\n";
+                                indiciFiltrati.push_back(i);
+                                contorS++;
+                            }
                         }
-                        std::cout<< "\n";
-                        indiciFiltrati.push_back(i);
-                        contor++;
+
+                        if (indiciFiltrati.empty()) {
+                            std::cout<<"Acest specialist nu are servicii configurate !\n";
+                            break;
+                        }
+
+                        int alegereS;
+                        std::cout << "Alegeti serviciul: ";
+                        while (!(std::cin >> alegereS) || alegereS < 1 || alegereS > (int)indiciFiltrati.size()) {
+                            std::cout<< "Selectie invalida: ";
+                            curataBuffer();
+                        }
+                        p.adaugaServiciu(catalogSalon[indiciFiltrati[alegereS - 1]]);
+
+                        std::cout << "Adaugat cu succes. ";
+                        std::cout << "\nMai adaugati un serviciu la acest specialist? (da/nu): ";
+                        std::cin >> altServiciu;
+                        curataBuffer();
+                    }while (altServiciu == "da" || altServiciu == "DA");
+
+                    //calcul durata totala
+                    int durataTotala = p.calculeazaDurataTotala();
+                    if (durataTotala > 0) {
+                        //selectare data
+                        int zi, luna, an;
+                        std::cout<< "\nData dorita (zi luna an): ";
+                        std::cin >>zi >>luna >> an;
+                        curataBuffer();
+
+                        if (zi <  1 || zi > 31 || luna < 1 || luna > 12 || an < 2026) {
+                            throw DataInvalidaException(zi, luna, an);
+                        }
+
+                        //cautare disponibilitate
+                        salonulMeu.afiseazaDisponibilitateAngajat( angAles->getNume(), zi, luna, an, durataTotala);
+
+                        std::cout<< "\nDoriti sa rezervati un interval? (da/nu): \n";
+                        std:: string confirm;
+                        std::cin >> confirm;
+                        curataBuffer();
+
+                        if (confirm == "da" || confirm == "DA") {
+                            int h,m;
+                            std::cout<< "Ora start programare: \n";
+                            std::cin >>h>>m;
+                            curataBuffer();
+
+                            IntervalOrar inter = {h, m, 0, 0};
+                            int minF = h * 60 + m +durataTotala;
+                            inter.oraFinal = minF / 60;
+                            inter.minutFinal = minF % 60;
+
+                            if (salonulMeu.esteAngajatDisponibil(*angAles, zi, luna, an, inter)) {
+                                //actualizare programare
+                                p.setData(zi, luna, an);
+                                p.setInterval(inter);
+
+                                std::cout<< "Observatii: \n";
+                                std::string obs;
+                                std:: getline(std::cin, obs);
+                                p.setObservatii(obs);
+
+                                salonulMeu.adaugaProgramare(p);
+                                std::cout<<"Rezervare confirmata pentru " << p.getNumeClient() << std::endl;
+                            } else {
+                                throw SuprapunereIntervalException(angAles->getNume(), h, m);
+                            }
+                        }
                     }
                 }
-
-                if (indiciFiltrati.empty()) {
-                    std::cout<<"Acest specialist nu are servicii configurate !\n";
-                    break;
+                catch (const SalonException& e) {
+                    std::cout << "\n [OPERATIE RESPINSA] " << e.what() << "\n";
+                    std::cout << "Rezervarea curenta a fost abandonata.\n";
                 }
 
-                int alegereS;
-                std::cout << "Alegeti serviciul: ";
-                while (!(std::cin >> alegereS) || alegereS < 1 || alegereS > (int)indiciFiltrati.size()) {
-                    std::cout<< "Selectie invalida: ";
-                    std::cin.clear();
-                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                std::cout<< "\nDoriti o alta programare? (sa/nu): ";
+                std::cin >> raspunsAltaProgramare;
+                curataBuffer();
+            } while (raspunsAltaProgramare == "da" || raspunsAltaProgramare == "DA");
+        }
+
+        //MOD MANAGER
+        else if (optiunePrincipala ==2) {
+            int optiuneManager = 0;
+            do {
+                std::cout << "\n----------------------------------------------";
+                std::cout << "\n PANOU DE CONTROL MANAGER";
+                std::cout << "\n----------------------------------------------";
+                std::cout << "\n[1] Vizualizare programari dupa o anumita zi";
+                std::cout << "\n[2] Vizualizare raport financiar pe o luna";
+                std::cout << "\n[3] Vizualizare lista salarii personal";
+                std::cout << "\n[4] Promovare angajat";
+                std::cout << "\n[5] Schimbare Manager General";
+                std::cout << "\n[6] Angajare personal nou (adaugare in sistem)";
+                std::cout << "\n[7] Afisare raport general salon";
+                std::cout << "\n[8] Inapoi la meniul principal";
+                std::cout << "\n----------------------------------------------";
+                std::cout << "\nSelectati actiunea: ";
+
+                if (!(std::cin >> optiuneManager)) {
+                    curataBuffer();
+                    continue;
                 }
-                p.adaugaServiciu(catalog[indiciFiltrati[alegereS - 1]]);
-                std::cout << "Adaugat cu succes. ";
-                std::cout << "\nMai adaugati un serviciu la acest specialist? (da/nu): ";
-                std::cin >> altServiciu;
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            }while (altServiciu == "da" || altServiciu == "DA");
 
+                if (optiuneManager == 1) {
+                    int z, l, a;
+                    std::cout<< "Introduceti data cautata (zi luna an): ";
+                    std::cin >> z >> l >> a;
+                    curataBuffer();
+                    salonulMeu.afiseazaProgramariDupaZi(z, l , a);
+                }
+                else if ( optiuneManager == 2) {
+                    int l, a;
+                    std::cout << "Intrduceti luna si anul: ";
+                    std::cin >>l >> a;
+                    curataBuffer();
+                    salonulMeu.afiseazaProgramariDupaLuna(l, a);
+                }
+                else if (optiuneManager == 3) {
+                    salonulMeu.vizualizeazaSalarii();
+                    std::cout << "\nNumarul total de angajati activi in memorie: " << Angajat::getNumarTotalAngajati() << "\n";
+                }
+                else if (optiuneManager == 4) {
+                    std::string numePromovare;
+                    std::cout << "Introduceti numele Juniorului pe care vreti sa-l promovati: ";
+                    if (std::cin.peek() == '\n') std::cin.ignore();
+                    std::getline(std::cin, numePromovare);
 
-            //calcul durata totala
-            int durataTotala = p.calculeazaDurataTotala();
-            if (durataTotala > 0) {
-                //selectare data
-                int zi, luna, an;
-                std::cout<< "\nData dorita (zi luna an): ";
-                std::cin >>zi >>luna >> an;
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-                //cautare disponibilitate
-                salonulMeu.afiseazaDisponibilitateAngajat( angAles.getNume(), zi, luna, an, durataTotala);
-
-                std::cout<< "\nDoriti sa rezervati un interval? (da/nu): \n";
-                std:: string confirm;
-                std::cin >> confirm;
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-                if (confirm == "da" || confirm == "DA") {
-                    int h,m;
-                    std::cout<< "Ora start programare: \n";
-                    std::cin >>h>>m;
-                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-                    IntervalOrar inter = {h, m, 0, 0};
-                    int minF = h * 60 + m +durataTotala;
-                    inter.oraFinal = minF / 60;
-                    inter.minutFinal = minF % 60;
-
-                    if (salonulMeu.esteAngajatDisponibil(angAles, zi, luna, an, inter)) {
-                        //actualizare programare
-                        p.setData(zi, luna, an);
-                        p.setInterval(inter);
-
-                        std::cout<< "Observatii: \n";
-                        std::string obs;
-                        std:: getline(std::cin, obs);
-                        p.setObservatii(obs);
-
-                        salonulMeu.adaugaProgramare(p);
-                        std::cout<<"Rezervare confirmata pentru " << p.getNumeClient() << std::endl;
+                    if (salonulMeu.upgradeAngajatLaSenior(numePromovare)) {
+                        std::cout << numePromovare << " a fost promovat la gradul de Stilist Senior\n";
                     } else {
-                        std::cout<<"Intervalul nu mai este disponibil. ";
-                    }
-                }else {
-                    std::cout <<"Doriti sa va programati la un alt specialist pentru aceste servicii?";
-                    std::string vreauAltul;
-                    std::getline(std::cin, vreauAltul);
-
-                    if (vreauAltul == "da" || vreauAltul =="DA") {
-                        std::cout<< "--- ALEGETI UN NOU SPECIALIST ---\n";
-                        for (size_t i = 0; i < listaAngajati.size(); ++i) {
-                            std::cout<< i + 1 << ". " << listaAngajati[i].getNume() << "\n";
-                        }
-                        int optiuneNoua;
-                        std::cin >> optiuneNoua;
-                        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-                        angAles = listaAngajati[optiuneNoua - 1];
-                        p.setStilist(angAles);
-
-                        std::cout << "Disponibilitate " << angAles.getNume() << ".\n";
-                        salonulMeu.afiseazaDisponibilitateAngajat(angAles.getNume(), zi, luna, an, durataTotala);
+                        std::cout << "Eroare: angajatul nu a fost gasit sau nu este inregistrat ca Junior.\n";
                     }
                 }
-            }
+                else if (optiuneManager == 5) {
+                    std::string numeNouManager;
+                    double salariuNou;
+                    std::cout << "Numele noului Manager General:\n ";
+                    if (std::cin.peek() == '\n') std::cin.ignore();
+                    std::getline(std::cin, numeNouManager);
+                    std::cout << "Salariul fix stabilit pentru noul manager:\n ";
+                    std::cin >> salariuNou;
+                    curataBuffer();
 
-            std::cout<< "\nDoriti o alta programare pentru " << numeClient << "? (da/nu): ";
-            std::cin >> raspunsAltaProgramare;
-            std:: cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        } while (raspunsAltaProgramare == "da" || raspunsAltaProgramare == "DA");
+                    salonulMeu.schimbaManagerul(numeNouManager, salariuNou);
+                    std::cout << "Managerul a fost inlocuit cu succes. Noul Manager este " << numeNouManager << ".\n";
+                }
+                else if (optiuneManager == 6) {
+                    std::string numeN, specN;
+                    int tipA = 0;
+                    std::cout << "Tip angajat (1 - Junior, 2 -Senior): ";
+                    std::cin >> tipA;
+                    curataBuffer();
 
-        std::cout<<"\nDoriti sa faceti o programare pentru alt client? (da/nu): ";
-        std::cin >> raspunsClientNou;
-    } while (raspunsClientNou =="da" || raspunsClientNou == "DA");
+                    std::cout << "Nume angajat: ";
+                    std::getline(std::cin, numeN);
+                    std::cout << "Specializare: ";
+                    std::getline(std::cin, specN);
 
-    std:: cout<<salonulMeu <<"\n";
-    salonulMeu.afiseazaRaportZilnic();
+                    Angajat* angajatNou = nullptr;
+                    if (tipA == 1) {
+                        double tarif;
+                        std::cout<< "Tarif orar baza (RON/ora): ";
+                        std::cin >> tarif; curataBuffer();
+                        angajatNou = new StilistJunior(numeN, specN, tarif);
+                    } else {
+                        double comision;
+                        std::cout << "Procent comision: ";
+                        std::cin >> comision; curataBuffer();
+                        angajatNou = new StilistSenior(numeN, specN, comision, 0);
+                    }
+                    std::string raspunsServiciu;
+                    std::cout<< "\nDoriti sa configurati un serviciu prestat de " << numeN << "? (da/nu): ";
+                    std::cin >> raspunsServiciu;
+                    curataBuffer();
+                    while (raspunsServiciu == "da" || raspunsServiciu == "DA") {
+                        std::string numeServ, catServ;
+                        double pretServ;
+                        int durataServ;
+
+                        std::cout << "-> Nume serviciu: ";
+                        std::getline(std::cin, numeServ);
+                        std::cout << "-> Pret serviciu (RON): ";
+                        std::cin >> pretServ;
+                        std::cout << "-> Durata estimata (minute): ";
+                        std::cin >> durataServ;
+                        curataBuffer();
+                        std::cout << "-> Categoria: ";
+                        std::getline(std::cin, catServ);
+
+                        Serviciu s(numeServ, pretServ, durataServ, catServ);
+                        salonulMeu.adaugaServiciuInCatalog(s);
+
+                        if (!angajatNou->poatePresta(catServ)) {
+                            angajatNou->adaugaCompetenta(catServ);
+                        }
+                        std::cout << " Serviciul \"" << numeServ << "\" a fost adugat iin catalog sub categoria \"" << catServ << "\".\n";
+                        std::cout << "\nMai adaugati un alt serviciu pentru acest angajat? (da/nu): ";
+                        std::cin >> raspunsServiciu;
+                        curataBuffer();
+                    }
+                    std::string RaspunsCompExistenta;
+                    std::cout << "\nDoriti  sa-i asociati si o competenta existenta din catalog? (da/nu): ";
+                    std::cin >> RaspunsCompExistenta;
+                    curataBuffer();
+                    if ( RaspunsCompExistenta == "da" || RaspunsCompExistenta == "DA") {
+                        std::cout << " Introduceti numele categoriei existente ";
+                        std::string compE;
+                        std::getline(std::cin, compE);
+                        angajatNou->adaugaCompetenta(compE);
+                        std::cout << " Competenta \"" << compE << "\" a fost adaugata!\n";
+                    }
+                    salonulMeu.adaugaAngajat(angajatNou);
+                    std::cout << " Angajatul " << numeN << " a fost adaugat cu succes in echipa.\n";
+                }
+                else if (optiuneManager == 7) {
+                    std::cout << "\n";
+                    salonulMeu.afiseazaRaportZilnic();
+                }
+            } while (optiuneManager != 8);
+        }
+
+    } while (optiunePrincipala !=3);
+
+    std::cout << "\nSistemul s-a inchis. O zi buna!\n";
     return 0;
 }

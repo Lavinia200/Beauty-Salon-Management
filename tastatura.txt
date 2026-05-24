@@ -1,18 +1,31 @@
-Lavinia Popescu
-2
-2
-nu
-15 05 2026
-da
-10 00
-Are parul lung.
-da
 1
+Alex Popescu
+2
 1
 nu
-15 05 2026
+20 05 2026
 da
-12 30
-Fara oja stridenta.
+10 30
+Fara observatii
 nu
+2
+3
+5
+Ioana Radu
+6500
+6
+2
+Stefan Negoita
+Barber Expert
+0.15
+da
+Tuns Barba Premium
+45
+20
+Tuns
 nu
+da
+Vopsit
+3
+8
+3
