@@ -199,7 +199,7 @@ Salon::~Salon() {
 }
 
 Salon::Salon(const Salon& other) : numeSalon(other.numeSalon), listaProgramari(other.listaProgramari) {
-    for (auto* ang : other.angajatiSalon) {
+    for ( const auto* ang : other.angajatiSalon) {
         if (ang != nullptr) {
             this->angajatiSalon.push_back(ang->clone());
         }
@@ -295,7 +295,7 @@ void Salon::vizualizeazaSalarii() const {
 bool Salon::upgradeAngajatLaSenior(const std::string& numeCautat) {
     for (size_t i = 0; i < angajatiSalon.size(); ++i) {
         if (angajatiSalon[i]->getNume() == numeCautat) {
-            auto* junior = dynamic_cast<StilistJunior*>(angajatiSalon[i]);
+            const auto* junior = dynamic_cast<StilistJunior*>(angajatiSalon[i]);
             if (junior != nullptr) {
                 std::string nume = junior->getNume();
                 std::string spec = junior->getSpecializare();
@@ -304,7 +304,7 @@ bool Salon::upgradeAngajatLaSenior(const std::string& numeCautat) {
                 delete angajatiSalon[i];
 
                 auto* senior = new StilistSenior(nume, spec, 0.12, 0);
-                for (auto comp : competenteSalvate) {
+                for (const auto& comp : competenteSalvate) {
                     senior->adaugaCompetenta(comp);
                 }
 

@@ -84,7 +84,7 @@ int main() {
                     }
                     curataBuffer();
 
-                    Angajat* angAles = listaAngajati[optiuneAng - 1];
+                    const Angajat* angAles = listaAngajati[optiuneAng - 1];
                     IntervalOrar intervalGol = {0,0,0,0};
                     Programare p(numeClient, *angAles, 0,0,0,intervalGol);
 
