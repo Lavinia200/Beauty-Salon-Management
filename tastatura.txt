@@ -3,7 +3,7 @@ Alex Popescu
 2
 1
 nu
-20 05 2026
+20 06 2026
 da
 10 30
 Fara observatii
@@ -26,6 +26,13 @@ Tuns
 nu
 da
 Vopsit
-3
 8
+Stefan Negoita
+1
+Styling Specialist
+8
+Matei
+2
+3
+9
 3

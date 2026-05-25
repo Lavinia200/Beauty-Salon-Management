@@ -135,7 +135,9 @@ int main() {
                         std::cin >>zi >>luna >> an;
                         curataBuffer();
 
-                        if (zi <  1 || zi > 31 || luna < 1 || luna > 12 || an < 2026) {
+                        if (zi <  1 || zi > 31 || luna < 1 || luna > 12 || an < 2026 ||
+                            (an == 2026 && luna < 5) ||
+                            (an == 2026 && luna == 5 && zi <25 )) {
                             throw DataInvalidaException(zi, luna, an);
                         }
 
@@ -181,7 +183,7 @@ int main() {
                     std::cout << "Rezervarea curenta a fost abandonata.\n";
                 }
 
-                std::cout<< "\nDoriti o alta programare? (sa/nu): ";
+                std::cout<< "\nDoriti o alta programare? (da/nu): ";
                 std::cin >> raspunsAltaProgramare;
                 curataBuffer();
             } while (raspunsAltaProgramare == "da" || raspunsAltaProgramare == "DA");
@@ -201,7 +203,8 @@ int main() {
                 std::cout << "\n[5] Schimbare Manager General";
                 std::cout << "\n[6] Angajare personal nou (adaugare in sistem)";
                 std::cout << "\n[7] Afisare raport general salon";
-                std::cout << "\n[8] Inapoi la meniul principal";
+                std::cout << "\n[8] Modificare profil angajat";
+                std::cout << "\n[9] Inapoi la meniul principal";
                 std::cout << "\n----------------------------------------------";
                 std::cout << "\nSelectati actiunea: ";
 
@@ -256,24 +259,24 @@ int main() {
                 else if (optiuneManager == 6) {
                     std::string numeN, specN;
                     int tipA = 0;
-                    std::cout << "Tip angajat (1 - Junior, 2 -Senior): ";
+                    std::cout << "\nTip angajat (1 - Junior, 2 -Senior): ";
                     std::cin >> tipA;
                     curataBuffer();
 
-                    std::cout << "Nume angajat: ";
+                    std::cout << "\nNume angajat: ";
                     std::getline(std::cin, numeN);
-                    std::cout << "Specializare: ";
+                    std::cout << "\nSpecializare: ";
                     std::getline(std::cin, specN);
 
                     Angajat* angajatNou = nullptr;
                     if (tipA == 1) {
                         double tarif;
-                        std::cout<< "Tarif orar baza (RON/ora): ";
+                        std::cout<< "\nTarif orar baza (RON/ora): ";
                         std::cin >> tarif; curataBuffer();
                         angajatNou = new StilistJunior(numeN, specN, tarif);
                     } else {
                         double comision;
-                        std::cout << "Procent comision: ";
+                        std::cout << "\nProcent comision: ";
                         std::cin >> comision; curataBuffer();
                         angajatNou = new StilistSenior(numeN, specN, comision, 0);
                     }
@@ -286,14 +289,14 @@ int main() {
                         double pretServ;
                         int durataServ;
 
-                        std::cout << "-> Nume serviciu: ";
+                        std::cout << "\n-> Nume serviciu: ";
                         std::getline(std::cin, numeServ);
                         std::cout << "-> Pret serviciu (RON): ";
                         std::cin >> pretServ;
-                        std::cout << "-> Durata estimata (minute): ";
+                        std::cout << "->\nDurata estimata (minute): ";
                         std::cin >> durataServ;
                         curataBuffer();
-                        std::cout << "-> Categoria: ";
+                        std::cout << "\n-> Categoria: ";
                         std::getline(std::cin, catServ);
 
                         Serviciu s(numeServ, pretServ, durataServ, catServ);
@@ -302,7 +305,7 @@ int main() {
                         if (!angajatNou->poatePresta(catServ)) {
                             angajatNou->adaugaCompetenta(catServ);
                         }
-                        std::cout << " Serviciul \"" << numeServ << "\" a fost adugat iin catalog sub categoria \"" << catServ << "\".\n";
+                        std::cout << "\nServiciul \"" << numeServ << "\" a fost adugat iin catalog sub categoria \"" << catServ << "\".\n";
                         std::cout << "\nMai adaugati un alt serviciu pentru acest angajat? (da/nu): ";
                         std::cin >> raspunsServiciu;
                         curataBuffer();
@@ -312,11 +315,11 @@ int main() {
                     std::cin >> RaspunsCompExistenta;
                     curataBuffer();
                     if ( RaspunsCompExistenta == "da" || RaspunsCompExistenta == "DA") {
-                        std::cout << " Introduceti numele categoriei existente ";
+                        std::cout << "\nIntroduceti numele categoriei existente: ";
                         std::string compE;
                         std::getline(std::cin, compE);
                         angajatNou->adaugaCompetenta(compE);
-                        std::cout << " Competenta \"" << compE << "\" a fost adaugata!\n";
+                        std::cout << "\nCompetenta \"" << compE << "\" a fost adaugata!\n";
                     }
                     salonulMeu.adaugaAngajat(angajatNou);
                     std::cout << " Angajatul " << numeN << " a fost adaugat cu succes in echipa.\n";
@@ -325,9 +328,60 @@ int main() {
                     std::cout << "\n";
                     salonulMeu.afiseazaRaportZilnic();
                 }
-            } while (optiuneManager != 8);
-        }
+                else if (optiuneManager == 8) {
+                    std::cout << "Introduceti numele angjatului pentru editare profil: ";
+                    std::string numeA;
+                    if (std::cin.peek() == '\n') std::cin.ignore();
+                    std::getline(std::cin, numeA);
 
+                    bool gasit = false;
+                    const auto& personal = salonulMeu.getAngajati();
+                    for (auto* ang : personal) {
+                        if (ang->getNume() == numeA) {
+                            gasit = true;
+                            std::cout << "\nCe detalii doriti sa modificati pentru " << numeA << "?\n";
+                            std::cout << "1.Schimba Specializarea (In prezent: " << ang->getSpecializare() << ")\n";
+                            if (ang->getGrad() == "Senior") std::cout << "2.Aloca un ucenic nou in subordine\n";
+                            if (ang->getGrad() == "Manager") std::cout << "3.Actualizeaza salariul fix de baza\n";
+                            std::cout << "Selectie: ";
+                            int alegereModif;
+                            std::cin>> alegereModif;
+                            curataBuffer();
+
+                            if (alegereModif == 1) {
+                                std::cout << "Intrduceti noua specializare: ";
+                                std::string nouaSpec;
+                                std::getline(std::cin, nouaSpec);
+                                ang->setSpecializare(nouaSpec);
+                                std::cout << "Specializarea a fost actualizata!\n";
+                            }
+                            else if (alegereModif == 2 && ang->getGrad() == "Senior") {
+                                auto* senior = dynamic_cast<StilistSenior*>(ang);
+                                if (senior) {
+                                    senior->adaugaUcenic();
+                                    std::cout << "Ucenic alocat! Total ucenici in prezent: " << senior->getNumarUcenici() << "\n";
+                                }
+                            }
+                            else if (alegereModif == 3 && ang->getGrad() == "Manager") {
+                                auto* manager = dynamic_cast<ManagerSalon*>(ang);
+                                if (manager) {
+                                    std::cout << "Intrduceti noul salariu fix: ";
+                                    double salNou;
+                                    std::cin >> salNou;
+                                    curataBuffer();
+                                    manager->setSalariuFix(salNou);
+                                    std::cout << "Salariul fix al managerului a fost actualizat !\n";
+                                }
+                            }
+                            break;
+                        }
+                    }
+                    if (!gasit){
+                        std::cout << "Angajatul cu numele " << numeA << " nu a fost gasit\n";
+                    }
+                }
+            } while (optiuneManager != 9);
+        }
     } while (optiunePrincipala !=3);
 
     std::cout << "\nSistemul s-a inchis. O zi buna!\n";

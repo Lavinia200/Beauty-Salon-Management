@@ -281,7 +281,12 @@ void Salon::vizualizeazaSalarii() const {
         << std::fixed <<std::setprecision(2) << ang->calculeazaSalariu(argumentFinanciar) << " RON\n";
 
         if (ang->getGrad() == "Senior") {
+            auto* seniorPtr = dynamic_cast<const StilistSenior*>(ang);
             std::cout << " (bazat pe incasari proprii de " << argumentFinanciar << " RON)";
+            if (seniorPtr) {
+                std::cout << " | ucenici coordonati: " << seniorPtr->getNumarUcenici();
+            }
+            std::cout << ")";
         }
         std::cout<< "\n";
     }
@@ -304,6 +309,11 @@ bool Salon::upgradeAngajatLaSenior(const std::string& numeCautat) {
                 }
 
                 angajatiSalon[i] = senior;
+                for (auto& p : listaProgramari) {
+                    if (p.getStilist().getNume() == nume) {
+                        p.setStilist(senior);
+                    }
+                }
                 return true;
             }
         }
