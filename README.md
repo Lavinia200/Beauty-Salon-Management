@@ -1,3 +1,5 @@
+# BEAUTY SALON MANAGEMENT
+
 # DESCRIEREA PROIECTULUI 
 Proiectul meu consta intr-o aplicatie de tip back-end pentru gestionarea activitatii zilnice dintr-un salon de infrumsetare.
 Functionalitati propuse: inregistrarea si stocarea datelor de contact ale angajatilor si clientilor, un catalog de servicii cu preturi si durate specifice si un sistem de programari.
