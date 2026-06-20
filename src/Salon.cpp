@@ -110,7 +110,7 @@ void StilistSenior::editeazaProfilSpecifice() {
     std::cin.clear();
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     if (op == 1) {
-        numarUcenici++;
+        adaugaUcenic();
         std::cout << "Modificare salvata. Total ucenici curent: " << numarUcenici << "\n";
     }
 }
@@ -146,7 +146,7 @@ void ManagerSalon::editeazaProfilSpecifice() {
     std::cin.clear();
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     if (salNou > 0) {
-        salariuFix = salNou;
+        setSalariuFix(salNou);
         std::cout << "Modificare salvata. Noul salariu de baza fix este: " << salariuFix << " RON\n";
     }
 }
@@ -353,7 +353,7 @@ void Salon::vizualizeazaSalarii() const {
 bool Salon::upgradeAngajatLaSenior(const std::string& numeCautat) {
     for (size_t i = 0; i < angajatiSalon.size(); ++i) {
         if (angajatiSalon[i]->getNume() == numeCautat) {
-            auto* junior = dynamic_cast<StilistJunior*>(angajatiSalon[i]);
+            auto* junior = dynamic_cast<const StilistJunior*>(angajatiSalon[i]);
             if (junior != nullptr) {
                 std::string nume = junior->getNume();
                 std::string spec = junior->getSpecializare();
