@@ -8,6 +8,8 @@
 #include <exception>
 #include <memory>
 
+class Salon;
+
 class SalonException : public std::exception {
 protected:
     std::string mesaj;
@@ -70,7 +72,12 @@ public:
     virtual ~Angajat();
 
     [[nodiscard]] virtual Angajat* clone() const = 0;
-    [[nodiscard]] virtual double calculeazaSalariu(double incasariSalon) const  = 0;
+
+    [[nodiscard]] virtual double calculeazaSalariu(const Salon& salon) const  = 0;
+    virtual void afiseazaFluturasSalariu(const Salon& salon) const = 0;
+    virtual void editeazaProfilSpecifice() = 0;
+
+    [[nodiscard]] virtual bool esteManager() const {return false;}
 
     [[nodiscard]] virtual std::string getGrad() const = 0;
 
@@ -101,7 +108,10 @@ class StilistJunior : public Angajat {
 public:
     StilistJunior(const std::string& nume_ang,const std::string& spec, double tarif);
     [[nodiscard]] Angajat* clone() const override {return new StilistJunior(*this); }
-    [[nodiscard]] double calculeazaSalariu(double incasariSalon) const override;
+    [[nodiscard]] double calculeazaSalariu(const Salon& salon) const override;
+    void afiseazaFluturasSalariu(const Salon& salon) const override;
+    void editeazaProfilSpecifice() override;
+
     [[nodiscard]] std::string getGrad() const override { return "Junior"; }
 };
 
@@ -111,9 +121,11 @@ class StilistSenior : public Angajat {
 public:
     StilistSenior(const std::string& nume_ang,const std::string& spec,double comision, int ucenici = 0);
     [[nodiscard]] Angajat* clone() const override { return new StilistSenior(*this); }
-    [[nodiscard]] double calculeazaSalariu (double incasariSalon) const override;
-    [[nodiscard]] std::string getGrad() const override { return "Senior"; }
+    [[nodiscard]] double calculeazaSalariu (const Salon& salon) const override;
+    void afiseazaFluturasSalariu(const Salon& salon) const override;
+    void editeazaProfilSpecifice() override;
 
+    [[nodiscard]] std::string getGrad() const override { return "Senior"; }
     void adaugaUcenic() {numarUcenici ++; }
     [[nodiscard]] int getNumarUcenici() const { return numarUcenici; }
 };
@@ -123,9 +135,12 @@ class ManagerSalon : public Angajat {
 public:
     ManagerSalon(const std::string& nume_ang, double fix);
     [[nodiscard]] Angajat* clone() const override { return new ManagerSalon(*this); }
-    [[nodiscard]] double calculeazaSalariu(double incasariSalon) const override;
-    [[nodiscard]] std::string getGrad() const override {return "Manager"; }
+    [[nodiscard]] double calculeazaSalariu(const Salon& salon) const override;
+    void afiseazaFluturasSalariu(const Salon& salon) const override;
+    void editeazaProfilSpecifice() override;
+    [[nodiscard]] bool esteManager() const override {return true;}
 
+    [[nodiscard]] std::string getGrad() const override {return "Manager"; }
     void setSalariuFix(double suma) {salariuFix = suma; }
 };
 

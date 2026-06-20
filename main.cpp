@@ -329,7 +329,7 @@ int main() {
                     salonulMeu.afiseazaRaportZilnic();
                 }
                 else if (optiuneManager == 8) {
-                    std::cout << "Introduceti numele angjatului pentru editare profil: ";
+                    std::cout << "Introduceti numele angajatului pentru editare profil: ";
                     std::string numeA;
                     if (std::cin.peek() == '\n') std::cin.ignore();
                     std::getline(std::cin, numeA);
@@ -341,8 +341,7 @@ int main() {
                             gasit = true;
                             std::cout << "\nCe detalii doriti sa modificati pentru " << numeA << "?\n";
                             std::cout << "1.Schimba Specializarea (In prezent: " << ang->getSpecializare() << ")\n";
-                            if (ang->getGrad() == "Senior") std::cout << "2.Aloca un ucenic nou in subordine\n";
-                            if (ang->getGrad() == "Manager") std::cout << "3.Actualizeaza salariul fix de baza\n";
+                            std::cout << "2. Modifica atribute specifice rangului de " << ang->getGrad() << "\n";
                             std::cout << "Selectie: ";
                             int alegereModif;
                             std::cin>> alegereModif;
@@ -355,23 +354,8 @@ int main() {
                                 ang->setSpecializare(nouaSpec);
                                 std::cout << "Specializarea a fost actualizata!\n";
                             }
-                            else if (alegereModif == 2 && ang->getGrad() == "Senior") {
-                                auto* senior = dynamic_cast<StilistSenior*>(ang);
-                                if (senior) {
-                                    senior->adaugaUcenic();
-                                    std::cout << "Ucenic alocat! Total ucenici in prezent: " << senior->getNumarUcenici() << "\n";
-                                }
-                            }
-                            else if (alegereModif == 3 && ang->getGrad() == "Manager") {
-                                auto* manager = dynamic_cast<ManagerSalon*>(ang);
-                                if (manager) {
-                                    std::cout << "Intrduceti noul salariu fix: ";
-                                    double salNou;
-                                    std::cin >> salNou;
-                                    curataBuffer();
-                                    manager->setSalariuFix(salNou);
-                                    std::cout << "Salariul fix al managerului a fost actualizat !\n";
-                                }
+                            else if (alegereModif == 2) {
+                                ang->editeazaProfilSpecifice();
                             }
                             break;
                         }

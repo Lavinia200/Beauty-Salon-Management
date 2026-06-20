@@ -1,6 +1,7 @@
 #include "Salon.h"
 #include <utility>
 #include <iomanip>
+#include <limits>
 
 
 bool IntervalOrar::seSuprapuneCu(const IntervalOrar& altul) const {
@@ -56,22 +57,98 @@ std::ostream& operator<<(std::ostream& os, const Angajat& a) {
 StilistJunior::StilistJunior(const std::string& nume_ang,const std::string& spec, double tarif)
     : Angajat(nume_ang, spec), tarifOrarBaza(tarif) {}
 
-double StilistJunior::calculeazaSalariu(double) const {
-    return tarifOrarBaza * 160.0;
+double StilistJunior::calculeazaSalariu(const Salon& salon) const {
+    double baza = tarifOrarBaza * 160.0;
+    if (salon.calculeazaIncasariTotale() > 3000.0) {
+        baza += 250.0;
+    }
+    return baza;
+}
+void StilistJunior::afiseazaFluturasSalariu(const Salon& salon) const {
+    double total = calculeazaSalariu(salon);
+    std::cout << "- " << std::left << std::setw(12) << nume
+        << " [" << std::setw(7) << getGrad() << "] -> Salariu brut: "
+        << std::fixed << std::setprecision(2) << total << " RON";
+    if (salon.calculeazaIncasariTotale() > 3000.0) {
+        std:: cout << " (Include +250.00 RON bonus performanta colectiva)";
+    }
+    std::cout << "\n";
+}
+void StilistJunior::editeazaProfilSpecifice() {
+    std::cout << "-> Angajatii de rang Junior nu contin atribute administrative avansate editabile.\n";
 }
 
 StilistSenior::StilistSenior(const std::string& nume_ang,const std::string& spec, double comision, int ucenici)
     : Angajat(nume_ang, spec), procentComision(comision), numarUcenici(ucenici) {}
 
-double StilistSenior::calculeazaSalariu(double incasariSalon) const {
-    return 3000.0 + (incasariSalon * procentComision) + (numarUcenici * 200.0);
+double StilistSenior::calculeazaSalariu(const Salon& salon) const {
+    double incasariProprii = salon.calculeazaIncasariAngajat(nume);
+    double total = 3000.0 + (incasariProprii * procentComision) + (numarUcenici * 200.0);
+    if (incasariProprii > 1000.0) {
+        total += 350.0;
+    }
+    return total;
+}
+void StilistSenior::afiseazaFluturasSalariu(const Salon& salon) const {
+    double incasariProprii = salon.calculeazaIncasariAngajat(nume);
+    double total = calculeazaSalariu(salon);
+    std::cout << "- " << std::left << std::setw(12) << nume
+        << " [" << std::setw(15) << specializare << " - "
+        << std::setw(7) << getGrad() << "] -> Salariu brut: "
+        << std::fixed << std::setprecision(2) << total << " RON\n"
+        << " [Detalii:  Baza garantata 3000 RON | Comision: " << procentComision * 100 << "% din " << incasariProprii << " RON"
+        << " | Ucenici in subordine: " << numarUcenici << " (*200 RON)]";
+    if ( incasariProprii > 1000.0 ) {
+        std::cout << "\n >>> Extra-Bonus atins: +350.00 RON adaugati pentru depasire target vanzari.";
+    }
+    std:: cout << "\n";
+}
+
+void StilistSenior::editeazaProfilSpecifice() {
+    std::cout << "Proprietati specifice Senior: \n1. Aloca un ucenic nou in subordine\nSelectie: ";
+    int op; std::cin>> op;
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    if (op == 1) {
+        numarUcenici++;
+        std::cout << "Modificare salvata. Total ucenici curent: " << numarUcenici << "\n";
+    }
 }
 
 ManagerSalon:: ManagerSalon(const std::string& nume_ang, double fix)
     : Angajat(nume_ang, "Manager Salon"), salariuFix(fix) {}
 
-double ManagerSalon::calculeazaSalariu(double incasariSalon) const {
-    return salariuFix + (incasariSalon * 0.01); //+ bonus
+double ManagerSalon::calculeazaSalariu(const Salon& salon) const {
+    double incasariSalon = salon.calculeazaIncasariTotale();
+    double total = salariuFix + (incasariSalon * 0.01);
+    if (incasariSalon > 5000.0) {
+        total += 500.0;
+    }
+    return total;
+}
+
+void ManagerSalon::afiseazaFluturasSalariu(const Salon& salon) const {
+    double incasariSalon = salon.calculeazaIncasariTotale();
+    double total = salariuFix + (incasariSalon * 0.01);
+    std::cout << "- " << std::left << std::setw(12) << nume
+        << " [" << std::setw(15) << specializare << " - "
+        << std::setw(7) << getGrad() << "] -> Salariu brut: "
+        << std::fixed << std::setprecision(2) << total << " RON\n"
+        << " [Detalii: Contract administrativ " << salariuFix << " RON + 1% bonus din incasari globale (" << incasariSalon << " RON]";
+    if (incasariSalon > 5000.0) {
+        std::cout << "\n >>> Extra-bonus atins: +500.00 RON adaugati pentru eficienta operationala a salonului.";
+    }
+    std::cout << "\n";
+}
+void ManagerSalon::editeazaProfilSpecifice() {
+    std::cout << "Proprietati specifice Manager:\nIntroduceti noul salariu de baza fix administrativ: ";
+    double salNou; std::cin >> salNou;
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    if (salNou > 0) {
+        salariuFix = salNou;
+        std::cout << "Modificare salvata. Noul salariu de baza fix este: " << salariuFix << " RON\n";
+    }
 }
 
 //Implementare Programare
@@ -198,7 +275,7 @@ Salon::~Salon() {
     angajatiSalon.clear();
 }
 
-Salon::Salon(const Salon& other) : numeSalon(other.numeSalon), listaProgramari(other.listaProgramari) {
+Salon::Salon(const Salon& other) : numeSalon(other.numeSalon), listaProgramari(other.listaProgramari), catalogServicii(other.catalogServicii) {
     for ( const auto* ang : other.angajatiSalon) {
         if (ang != nullptr) {
             this->angajatiSalon.push_back(ang->clone());
@@ -266,40 +343,21 @@ void Salon::afiseazaProgramariDupaLuna(int l, int a) const {
 }
 
 void Salon::vizualizeazaSalarii() const {
-    double incasariGlobale = calculeazaIncasariTotale();
-    std::cout << "Incasari totale salon: " << incasariGlobale << "RON\n";
+    std::cout << "Incasari totale brute salon: " << calculeazaIncasariTotale() << " RON\n";
+    std::cout << "---------------------------------------------------------\n";
     for (const auto* ang : angajatiSalon) {
-        double argumentFinanciar = incasariGlobale;
-
-        if (ang->getGrad() == "Senior") {
-            argumentFinanciar = calculeazaIncasariAngajat(ang->getNume());
-        }
-
-        std::cout << "- " << std::left << std::setw(12) << ang->getNume()
-        << " [" <<std::setw(15) << ang->getSpecializare() << " - "
-        << std::setw(7) << ang->getGrad() << "] -> salariu brut: "
-        << std::fixed <<std::setprecision(2) << ang->calculeazaSalariu(argumentFinanciar) << " RON\n";
-
-        if (ang->getGrad() == "Senior") {
-            auto* seniorPtr = dynamic_cast<const StilistSenior*>(ang);
-            std::cout << " (bazat pe incasari proprii de " << argumentFinanciar << " RON)";
-            if (seniorPtr) {
-                std::cout << " | ucenici coordonati: " << seniorPtr->getNumarUcenici();
-            }
-            std::cout << ")";
-        }
-        std::cout<< "\n";
+        ang->afiseazaFluturasSalariu(*this);
     }
 }
 
 bool Salon::upgradeAngajatLaSenior(const std::string& numeCautat) {
     for (size_t i = 0; i < angajatiSalon.size(); ++i) {
         if (angajatiSalon[i]->getNume() == numeCautat) {
-            const auto* junior = dynamic_cast<StilistJunior*>(angajatiSalon[i]);
+            auto* junior = dynamic_cast<StilistJunior*>(angajatiSalon[i]);
             if (junior != nullptr) {
                 std::string nume = junior->getNume();
                 std::string spec = junior->getSpecializare();
-                auto competenteSalvate = junior->getCompetente();
+                auto competenteSalvate = angajatiSalon[i]->getCompetente();
 
                 delete angajatiSalon[i];
 
@@ -321,9 +379,9 @@ bool Salon::upgradeAngajatLaSenior(const std::string& numeCautat) {
     return false;
 }
 
-void Salon:: schimbaManagerul(const std::string& numeManagerNou, double salariuFixNou) {
+void Salon::schimbaManagerul(const std::string& numeManagerNou, double salariuFixNou) {
     for (size_t i= 0; i < angajatiSalon.size(); ++i) {
-        if (dynamic_cast<ManagerSalon*>(angajatiSalon[i]) != nullptr) {
+        if (angajatiSalon[i]->esteManager()) {
             delete angajatiSalon[i];
             angajatiSalon.erase(angajatiSalon.begin() + i);
             break;

@@ -3,7 +3,7 @@ Alex Popescu
 2
 1
 nu
-20 06 2026
+28 06 2026
 da
 10 30
 Fara observatii
@@ -33,6 +33,7 @@ Styling Specialist
 8
 Matei
 2
+1
 3
 9
 3
