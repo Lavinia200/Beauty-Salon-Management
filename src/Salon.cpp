@@ -97,7 +97,7 @@ void StilistSenior::afiseazaFluturasSalariu(const Salon& salon) const {
         << std::setw(7) << getGrad() << "] -> Salariu brut: "
         << std::fixed << std::setprecision(2) << total << " RON\n"
         << " [Detalii:  Baza garantata 3000 RON | Comision: " << procentComision * 100 << "% din " << incasariProprii << " RON"
-        << " | Ucenici in subordine: " << numarUcenici << " (*200 RON)]";
+        << " | Ucenici in subordine: " << getNumarUcenici() << " (*200 RON)]";
     if ( incasariProprii > 1000.0 ) {
         std::cout << "\n >>> Extra-Bonus atins: +350.00 RON adaugati pentru depasire target vanzari.";
     }
