@@ -51,11 +51,20 @@ include(cmake/CopyHelper.cmake)
 # NOTE: update executable name in .github/workflows/cmake.yml:25 when changing name here
 add_executable(${MAIN_EXECUTABLE_NAME}
     main.cpp
+    include/exceptii.h
+    include/servicii.h
+    include/angajat.h
+    include/programare.h
+    include/interfataUtilizator.h
+    include/Salon.h
+
+    src/angajat.cpp
+    src/servicii.cpp
+    src/programare.cpp
+    src/interfataUtilizator.cpp
+    src/Salon.cpp
 )
-target_sources(${MAIN_EXECUTABLE_NAME}
-    PRIVATE
-        src/Salon.cpp
-)
+
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )
 # NOTE: RUN_SANITIZERS is optional, if it's not present it will default to true
