@@ -70,7 +70,7 @@ bool Salon::upgradeAngajatLaSenior(const std::string& numeCautat) {
     for (size_t i = 0; i < angajatiSalon.size(); ++i) {
         if (angajatiSalon[i]->getNume() == numeCautat) {
             if (auto junior = std::dynamic_pointer_cast<StilistJunior>(angajatiSalon[i])) {
-                auto senior = std::make_shared<StilistSenior>(numeCautat, junior->getSpecializare(), 0.15, 0);                 std::string nume = junior->getNume();
+                auto senior = std::make_shared<StilistSenior>(numeCautat, junior->getSpecializare(), 0.15, 0);
 
                 for (const auto& comp : junior->getCompetente()) {
                     senior->adaugaCompetenta(comp);
