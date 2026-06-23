@@ -1,4 +1,4 @@
-#include "Programare.h"
+#include "programare.h"
 #include <utility>
 
 bool IntervalOrar::seSuprapuneCu(const IntervalOrar& altul) const {

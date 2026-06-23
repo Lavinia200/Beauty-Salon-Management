@@ -1,4 +1,4 @@
-#include "Angajat.h"
+#include "angajat.h"
 #include "Salon.h"
 #include <utility>
 #include <iomanip>

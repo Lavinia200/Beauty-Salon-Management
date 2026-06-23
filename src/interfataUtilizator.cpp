@@ -1,4 +1,4 @@
-#include "InterfataUtilizator.h"
+#include "interfataUtilizator.h"
 #include <iostream>
 #include <limits>
 

@@ -77,6 +77,11 @@ bool Salon::upgradeAngajatLaSenior(const std::string& numeCautat) {
                 }
 
                 angajatiSalon[i] = senior;
+                for (auto& prg : listaProgramari) {
+                    if (prg.getStilist().getNume() == numeCautat) {
+                        prg.setStilist(senior);
+                    }
+                }
                 return true;
             }
         }
