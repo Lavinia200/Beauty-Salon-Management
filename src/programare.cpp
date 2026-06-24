@@ -17,7 +17,6 @@ bool IntervalOrar::seSuprapuneCu(const IntervalOrar& altul) const {
 Programare::Programare(std::string client,std::shared_ptr<Angajat> a, int z, int l, int an_pr, IntervalOrar inter, const std::string& obs )
     : numeClient(std::move(client)),
       stilist(std::move(a)),
-      observatii(std::move(observatii)),
       interval(inter),
       zi(z),
       luna(l),
