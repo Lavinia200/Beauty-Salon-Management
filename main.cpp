@@ -1,9 +1,27 @@
 #include "Salon.h"
 #include "interfataUtilizator.h"
+#include "sablonGestiune.h"
+#include "logger.h"
+#include "angajatFactory.h"
 
 
 int main() {
 
+    GestiuneColectie<std::string> istoricActiuni;
+    istoricActiuni.adauga("Deschidere salon");
+    istoricActiuni.adauga("Incarcare catalog servicii");
+    GestiuneColectie<int> coduriPromotionale;
+    coduriPromotionale.adauga(1024);
+    coduriPromotionale.adauga(2048);
+
+    afiseazaElementeGeneric("Istoric Evenimente", istoricActiuni.getElemente());
+    afiseazaElementeGeneric("Coduri de Discount Active", coduriPromotionale.getElemente());
+    Logger::getInstance().log("Aplicatia a pornit cu succes.");
+
+    auto angajatNou = AngajatFactory::creeazaAngajat("Junior", "Simona", "Cosmetica");
+    if (angajatNou != nullptr) {
+        Logger::getInstance().log("Fabrica a generat un angajat nou: " + angajatNou->getNume());
+    }
     Salon salonulMeu("Beauty Lab");
 
     salonulMeu.adaugaServiciuInCatalog(Serviciu("Tuns Barbati", 50.0, 30, "Tuns"));

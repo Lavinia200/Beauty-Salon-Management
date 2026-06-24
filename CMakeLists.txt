@@ -63,6 +63,9 @@ add_executable(${MAIN_EXECUTABLE_NAME}
     src/programare.cpp
     src/interfataUtilizator.cpp
     src/Salon.cpp
+        include/sablonGestiune.h
+        include/logger.h
+        include/angajatFactory.h
 )
 
 
