@@ -36,7 +36,6 @@ Programare::Programare(const Programare& other){
     this->luna = other.luna;
     this->an = other.an;
     this->interval = other.interval;
-    this->observatii = other.observatii;
     this->servicii = other.servicii;
     if (other.observatii != nullptr) {
         this->observatii = new std::string(*other.observatii);
@@ -54,7 +53,6 @@ Programare& Programare::operator = (const Programare& other) {
         this->luna = other.luna;
         this->an = other.an;
         this->interval = other.interval;
-        this->observatii = other.observatii;
         this->servicii = other.servicii;
 
         delete this->observatii;
