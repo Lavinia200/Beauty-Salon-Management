@@ -15,6 +15,7 @@ int main() {
     coduriPromotionale.adauga(2048);
 
     afiseazaElementeGeneric("Istoric Evenimente", istoricActiuni.getElemente());
+    std::cout << "(Total actiuni inregistrate: " << istoricActiuni.dimensiune() << ")\n";
     afiseazaElementeGeneric("Coduri de Discount Active", coduriPromotionale.getElemente());
     Logger::getInstance().log("Aplicatia a pornit cu succes.");
 

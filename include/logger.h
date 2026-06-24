@@ -15,7 +15,7 @@ public:
         return instance;
     }
 
-    void log(const std::string& mesaj) {
+    static void log(const std::string& mesaj) {
         std::cout << "[LOG SALON]: " << mesaj << std::endl;
     }
 };
