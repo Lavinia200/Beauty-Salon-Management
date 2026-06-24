@@ -14,58 +14,65 @@ bool IntervalOrar::seSuprapuneCu(const IntervalOrar& altul) const {
 }
 
 //Implementare Programare
-Programare::Programare( const std::string& client,const Angajat& a, int z, int l, int an_pr, IntervalOrar inter, const std::string& obs )
-    : numeClient(client),
-      stilist(const_cast<Angajat*>(&a)),
-      observatii(obs.empty() ? nullptr : new std::string(obs)),
+Programare::Programare(std::string client,std::shared_ptr<Angajat> a, int z, int l, int an_pr, IntervalOrar inter, const std::string& obs )
+    : numeClient(std::move(client)),
+      stilist(std::move(a)),
+      observatii(std::move(observatii)),
       interval(inter),
       zi(z),
       luna(l),
-      an(an_pr) {}
-
-Programare::~Programare() {
-    delete observatii;
+      an(an_pr) {
+    this->observatii = new std::string(obs);
 }
 
+
+Programare::~Programare() {
+    delete this->observatii;
+}
 //copy constructor
-Programare::Programare(const Programare& other)
-  : numeClient(other.numeClient),
-    stilist(other.stilist),
-    servicii(other.servicii),
-    interval(other.interval),
-    zi(other.zi), luna(other.luna), an(other.an) {
+Programare::Programare(const Programare& other){
+    this->numeClient = other.numeClient;
+    this->stilist = other.stilist;
+    this->zi = other.zi;
+    this->luna = other.luna;
+    this->an = other.an;
+    this->interval = other.interval;
+    this->observatii = other.observatii;
+    this->servicii = other.servicii;
     if (other.observatii != nullptr) {
-        observatii = new std::string(*other.observatii);
-    }else {
-        observatii = nullptr;
+        this->observatii = new std::string(*other.observatii);
+    } else {
+        this->observatii = nullptr;
     }
 }
 
 //operator de atribuire
 Programare& Programare::operator = (const Programare& other) {
     if (this != &other) {
-        numeClient = other.numeClient;
-        stilist = other.stilist;
-        servicii = other.servicii;
-        interval = other.interval;
-        zi = other.zi; luna = other.luna; an = other.an;
+        this->numeClient = other.numeClient;
+        this->stilist = other.stilist;
+        this->zi = other.zi;
+        this->luna = other.luna;
+        this->an = other.an;
+        this->interval = other.interval;
+        this->observatii = other.observatii;
+        this->servicii = other.servicii;
 
-        delete observatii;
+        delete this->observatii;
         if (other.observatii != nullptr) {
-            observatii = new std::string(*other.observatii);
-        }else {
-            observatii = nullptr;
+            this->observatii = new std::string(*other.observatii);
+        } else {
+            this->observatii = nullptr;
         }
     }
     return *this ;
 }
 
 void Programare::setObservatii (const std::string& obs) {
-    delete observatii;
-    if (!obs.empty()) {
-        observatii = new std::string(obs);
-    }else {
-        observatii = nullptr;
+    if (this->observatii != nullptr) {
+        *(this->observatii) = obs;
+    } else {
+        this->observatii = new std::string(obs);
     }
 }
 

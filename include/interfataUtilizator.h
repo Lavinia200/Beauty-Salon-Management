@@ -5,7 +5,7 @@
 #include "Salon.h"
 class InterfataUtilizator {
 private:
-    void curataBuffer() const;
+    static void curataBuffer();
     void executaModClient(Salon& salon);
     void executaModManager(Salon& salon);
 public:

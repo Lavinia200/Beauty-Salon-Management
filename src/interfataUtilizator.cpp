@@ -2,7 +2,7 @@
 #include <iostream>
 #include <limits>
 
-void InterfataUtilizator::curataBuffer() const {
+void InterfataUtilizator::curataBuffer() {
     std::cin.clear();
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
@@ -20,7 +20,7 @@ void InterfataUtilizator::ruleaza(Salon& salon) {
 
         if (!(std::cin >> optiunePrincipala)) {
             curataBuffer();
-            continue;
+            break;
         }
         if (optiunePrincipala == 1) {
             executaModClient(salon);
@@ -53,23 +53,24 @@ void InterfataUtilizator::executaModClient(Salon& salon) {
             int optiuneAng;
             std::cout<< "Alegeti specialistul dorit: ";
             while (!(std::cin >> optiuneAng) || optiuneAng < 1 || optiuneAng > (int)listaAngajati.size()) {
+                if (std::cin.eof()) return;
                 std::cout<< "Selectie invalida.Reincercati: ";
                 curataBuffer();
             }
             curataBuffer();
 
-            const Angajat& angAles = *(listaAngajati[optiuneAng - 1]);
+            std::shared_ptr<Angajat> angAles = listaAngajati[optiuneAng - 1];
             IntervalOrar intervalGol = {0,0,0,0};
             Programare p(numeClient, angAles, 0,0,0,intervalGol);
 
             std::string altServiciu;
             do {
-                std::cout <<"\n--- SERVICII PRESTATE DE " << angAles.getNume() << " ---\n";
+                std::cout <<"\n--- SERVICII PRESTATE DE " << angAles->getNume() << " ---\n";
                 std::vector <int> indiciFiltrati;
                 int contorS = 1;
                 const auto& catalogSalon = salon.getCatalog();
                 for (size_t i = 0; i < catalogSalon.size(); ++i) {
-                    if (angAles.poatePresta(catalogSalon[i].getTip())) {
+                    if (angAles->poatePresta(catalogSalon[i].getTip())) {
                         std::cout << contorS << ". " <<std::left <<std::setw(20) << catalogSalon[i].getNume()
                         << " | " << catalogSalon[i].getDurata() << " min | " <<catalogSalon[i].getPret() <<" RON";
                         if (catalogSalon[i].esteComplex()) {
@@ -116,7 +117,7 @@ void InterfataUtilizator::executaModClient(Salon& salon) {
                 }
 
                 //cautare disponibilitate
-                salon.afiseazaDisponibilitateAngajat( angAles.getNume(), zi, luna, an, durataTotala);
+                salon.afiseazaDisponibilitateAngajat(angAles->getNume(), zi, luna, an, durataTotala);
 
                 std::cout<< "\nDoriti sa rezervati un interval? (da/nu): \n";
                 std:: string confirm;
@@ -134,7 +135,7 @@ void InterfataUtilizator::executaModClient(Salon& salon) {
                     inter.oraFinal = minF / 60;
                     inter.minutFinal = minF % 60;
 
-                    if (salon.esteAngajatDisponibil(angAles, zi, luna, an, inter)) {
+                    if (salon.esteAngajatDisponibil(*angAles, zi, luna, an, inter)) {
                         //actualizare programare
                         p.setData(zi, luna, an);
                         p.setInterval(inter);
@@ -147,7 +148,7 @@ void InterfataUtilizator::executaModClient(Salon& salon) {
                         salon.adaugaProgramare(p);
                         std::cout<<"Rezervare confirmata pentru " << p.getNumeClient() << std::endl;
                     } else {
-                        throw SuprapunereIntervalException(angAles.getNume(), h, m);
+                        throw SuprapunereIntervalException(angAles->getNume(), h, m);
                     }
                 }
             }
@@ -182,7 +183,7 @@ void InterfataUtilizator::executaModManager(Salon& salon) {
 
         if (!(std::cin >> optiuneManager)) {
             curataBuffer();
-            continue;
+            break;
         }
 
         if (optiuneManager == 1) {

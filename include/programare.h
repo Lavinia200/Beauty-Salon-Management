@@ -16,6 +16,8 @@ struct IntervalOrar {
 };
 
 class Programare {
+private:
+
     std::string numeClient;
     std::shared_ptr<Angajat> stilist;
     std::vector<Serviciu> servicii;
@@ -23,7 +25,7 @@ class Programare {
     IntervalOrar interval;
     int zi, luna, an;
 public:
-    Programare( const std::string& client,const Angajat& a, int z, int l , int an_pr, IntervalOrar inter, const std::string& obs = "");
+    Programare(std::string client,std::shared_ptr<Angajat> a, int z, int l , int an_pr, IntervalOrar inter, const std::string& obs = "");
     ~Programare();
     Programare(const Programare& other);
     Programare& operator=(const Programare& other);
